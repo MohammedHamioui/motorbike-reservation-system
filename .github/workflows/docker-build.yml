@@ -20,8 +20,25 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Run unit tests (all modules)
+      - name: Run unit tests for api-gateway
         run: mvn test
+        working-directory: ./api-gateway
+
+      - name: Run unit tests for client-service
+        run: mvn test
+        working-directory: ./client-service
+
+      - name: Run unit tests for motorbike-service
+        run: mvn test
+        working-directory: ./motorbike-service
+
+      - name: Run unit tests for reservation-service
+        run: mvn test
+        working-directory: ./reservation-service
+
+      - name: Run unit tests for payment-service
+        run: mvn test
+        working-directory: ./payment-service
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
