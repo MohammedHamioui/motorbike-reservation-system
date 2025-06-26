@@ -5,6 +5,9 @@ WORKDIR /app
 
 COPY . /app
 
+# Give execute permission to mvnw
+RUN chmod +x mvnw
+
 RUN ./mvnw clean package -DskipTests
 
 CMD ["java", "-jar", "target/reservation-service-0.0.1-SNAPSHOT.jar"] 

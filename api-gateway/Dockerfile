@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy the Maven build file and source code
 COPY . /app
 
+# Give execute permission to mvnw
+RUN chmod +x mvnw
+
 # Package the application
 RUN ./mvnw clean package -DskipTests
 
