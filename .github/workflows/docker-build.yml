@@ -1,13 +1,23 @@
-name: CI/CD Build and Test
+name: CI/CD Build, Test, and Dockerize Microservices
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build:
+  # Build and test all microservices in parallel using a matrix
+  build-and-test:
+    name: Build & Test Microservices
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        service:
+          - client-service
+          - motorbike-service
+          - reservation-service
+          - payment-service
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -19,24 +29,29 @@ jobs:
           cache: 'maven'
           distribution: 'temurin'
 
-      - name: Run unit tests for client-service
+      - name: Build and test ${{ matrix.service }}
         run: mvn package -B
-        working-directory: ./client-service
+        working-directory: ./${{ matrix.service }}
 
-      - name: Run unit tests for motorbike-service
-        run: mvn package -B
-        working-directory: ./motorbike-service
-
-      - name: Run unit tests for reservation-service
-        run: mvn package -B
-        working-directory: ./reservation-service
-
-      - name: Run unit tests for payment-service
-        run: mvn package -B
-        working-directory: ./payment-service
+  # Build Docker images for all services after successful build & test
+  docker-build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
 
       - name: Build api-gateway image
         run: docker build -t api-gateway ./api-gateway
@@ -52,3 +67,11 @@ jobs:
 
       - name: Build payment-service image
         run: docker build -t payment-service ./payment-service
+
+      # Optionally, build all images with docker-compose
+      - name: Build all images with docker-compose (optional)
+        run: docker compose build
+        continue-on-error: true
+
+  # Optionally, add a summary job for test results or notifications
+  # You can also add jobs for pushing images to a registry, deploying, etc.
