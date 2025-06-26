@@ -54,4 +54,14 @@ public class PaymentController {
         dto.setReservationDetails(reservationDetails);
         return ResponseEntity.ok(dto);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePayment(@PathVariable String id, @RequestBody Payment payment) {
+        try {
+            Payment updated = paymentService.updatePayment(id, payment);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }

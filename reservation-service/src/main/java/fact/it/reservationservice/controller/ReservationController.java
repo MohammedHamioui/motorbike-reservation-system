@@ -61,4 +61,14 @@ public class ReservationController {
     public void deleteReservation(@PathVariable String id) {
         reservationService.deleteReservation(id);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateReservation(@PathVariable String id, @RequestBody Reservation reservation) {
+        try {
+            Reservation updated = reservationService.updateReservation(id, reservation);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }

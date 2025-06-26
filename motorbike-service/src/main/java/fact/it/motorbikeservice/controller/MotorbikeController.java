@@ -34,4 +34,9 @@ public class MotorbikeController {
     public Motorbike createMotorbike(@RequestBody MotorbikeDTO motorbikeDTO) {
         return motorbikeService.createMotorbike(motorbikeDTO);
     }
+
+    @PutMapping("/{id}")
+    public Motorbike updateMotorbike(@PathVariable Long id, @RequestBody MotorbikeDTO motorbikeDTO) {
+        return motorbikeService.updateMotorbike(id, motorbikeDTO);
+    }
 }
