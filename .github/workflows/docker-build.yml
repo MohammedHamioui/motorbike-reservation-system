@@ -21,7 +21,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Run unit tests (all modules)
-        run: ./mvnw test
+        run: mvn test
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
