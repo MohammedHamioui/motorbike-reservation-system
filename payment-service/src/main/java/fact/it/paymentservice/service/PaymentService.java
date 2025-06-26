@@ -54,4 +54,20 @@ public class PaymentService {
         }
     }
 
+    public Payment updatePayment(String id, Payment updatedPayment) {
+        Payment existing = paymentRepository.findById(id).orElse(null);
+        if (existing == null) {
+            throw new RuntimeException("Payment not found with id: " + id);
+        }
+        // Validate reservation existence
+        if (!reservationExists(updatedPayment.getReservationId())) {
+            throw new RuntimeException("Reservation does not exist");
+        }
+        existing.setReservationId(updatedPayment.getReservationId());
+        existing.setAmount(updatedPayment.getAmount());
+        existing.setPaymentDate(updatedPayment.getPaymentDate());
+        existing.setStatus(updatedPayment.getStatus());
+        return paymentRepository.save(existing);
+    }
+
 }

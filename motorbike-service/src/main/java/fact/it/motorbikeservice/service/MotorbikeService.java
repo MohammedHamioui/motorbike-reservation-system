@@ -44,4 +44,18 @@ public class MotorbikeService {
         motorbike.setPrice(motorbikeDTO.getPrice());
         return motorbikeRepository.save(motorbike);
     }
+
+    public Motorbike updateMotorbike(Long id, MotorbikeDTO motorbikeDTO) {
+        Optional<Motorbike> optionalMotorbike = motorbikeRepository.findById(id);
+        if (optionalMotorbike.isPresent()) {
+            Motorbike motorbike = optionalMotorbike.get();
+            motorbike.setMake(motorbikeDTO.getMake());
+            motorbike.setModel(motorbikeDTO.getModel());
+            motorbike.setYear(motorbikeDTO.getYear());
+            motorbike.setPrice(motorbikeDTO.getPrice());
+            return motorbikeRepository.save(motorbike);
+        } else {
+            throw new RuntimeException("Motorbike not found with id: " + id);
+        }
+    }
 }

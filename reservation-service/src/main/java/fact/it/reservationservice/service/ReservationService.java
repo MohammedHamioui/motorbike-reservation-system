@@ -71,4 +71,24 @@ public class ReservationService {
             return null;
         }
     }
+
+    public Reservation updateReservation(String id, Reservation updatedReservation) {
+        Reservation existing = reservationRepository.findById(id).orElse(null);
+        if (existing == null) {
+            throw new RuntimeException("Reservation not found with id: " + id);
+        }
+        // Validate client and motorbike existence
+        if (!clientExists(updatedReservation.getClientId())) {
+            throw new RuntimeException("Client does not exist");
+        }
+        if (!motorbikeExists(updatedReservation.getMotorbikeId())) {
+            throw new RuntimeException("Motorbike does not exist");
+        }
+        existing.setClientId(updatedReservation.getClientId());
+        existing.setMotorbikeId(updatedReservation.getMotorbikeId());
+        existing.setReservationDate(updatedReservation.getReservationDate());
+        existing.setStartDate(updatedReservation.getStartDate());
+        existing.setEndDate(updatedReservation.getEndDate());
+        return reservationRepository.save(existing);
+    }
 }
