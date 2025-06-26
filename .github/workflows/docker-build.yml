@@ -16,26 +16,27 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
+          cache: 'maven'
           distribution: 'temurin'
 
       - name: Run unit tests for api-gateway
-        run: mvn test
+        run: mvn package -B
         working-directory: ./api-gateway
 
       - name: Run unit tests for client-service
-        run: mvn test
+        run: mvn package -B
         working-directory: ./client-service
 
       - name: Run unit tests for motorbike-service
-        run: mvn test
+        run: mvn package -B
         working-directory: ./motorbike-service
 
       - name: Run unit tests for reservation-service
-        run: mvn test
+        run: mvn package -B
         working-directory: ./reservation-service
 
       - name: Run unit tests for payment-service
-        run: mvn test
+        run: mvn package -B
         working-directory: ./payment-service
 
       - name: Set up Docker Buildx
