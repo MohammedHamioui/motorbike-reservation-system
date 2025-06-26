@@ -5,8 +5,15 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - client-service
+          - motorbike-service
+          - reservation-service
+          - payment-service
 
     steps:
       - name: Checkout code
@@ -19,25 +26,9 @@ jobs:
           cache: 'maven'
           distribution: 'temurin'
 
-      - name: Run unit tests for api-gateway
+      - name: Build and test ${{ matrix.service }}
         run: mvn package -B
-        working-directory: ./api-gateway
-
-      - name: Run unit tests for client-service
-        run: mvn package -B
-        working-directory: ./client-service
-
-      - name: Run unit tests for motorbike-service
-        run: mvn package -B
-        working-directory: ./motorbike-service
-
-      - name: Run unit tests for reservation-service
-        run: mvn package -B
-        working-directory: ./reservation-service
-
-      - name: Run unit tests for payment-service
-        run: mvn package -B
-        working-directory: ./payment-service
+        working-directory: ./${{ matrix.service }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
