@@ -35,7 +35,7 @@ The system consists of four independent microservices, each built with **Java Sp
 All services are containerized and managed using **Docker Compose**, enabling easy setup and scalability. A centralized **API Gateway** secures all incoming requests with **OAuth2 authentication**, ensuring robust access control across microservices. A fully automated **CI/CD pipeline** handles building, testing, and deploying services, supporting a seamless development workflow.
 
 ## Architecture
-Details about your system architecture.
+<img width="809" height="479" alt="image" src="https://github.com/user-attachments/assets/a23fb1e2-855f-4eea-96b5-b363debb3592" />
 
 ## CI/CD Pipeline
 This project uses a CI/CD pipeline to automate building, testing, and deploying the microservices. All code and version control is handled by GitHub actions.
